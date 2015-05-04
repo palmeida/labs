@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Desvalorização da moeda{% endblock %}
+
+{% block print_header %}Desvalorização da moeda{% endblock %}</p>
+
+{% block inpage_title %}Desvalorização da moeda{% endblock %}
+
+{% block base_header %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/devaluation_style.css' %}">
+  <meta name="keywords" content="desvalorização, moeda, inflacção">
+  <meta name="description" content="Desvalorização da moeda">
+{% endblock %}
+
+{% block main_menu %}
+<li><a href="{% url 'index' %}">Página inicial</a>
+<li><hr>
+<li><a href="{% url 'devaluation_calc' %}">Desvalorização</a>
+<li><a href="{% url 'devaluation_notes' %}">Notas</a>
+<li><a href="{% url 'devaluation_about' %}">Acerca</a>
+{% endblock %}
+
+{% block screen_footer %}
+    <p>[ <a href="{% url 'index' %}">Pagina Inicial</a> ] 
+{% endblock %}

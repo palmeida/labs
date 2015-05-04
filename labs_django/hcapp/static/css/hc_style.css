@@ -1,0 +1,96 @@
+/* Special classes */
+
+.download {
+  float: right;
+  margin-right: 1.5em;
+  background-color: SeaGreen;
+  border-radius:0.3em;
+  color: white;
+}
+
+.download a {
+  display: block;
+  text-decoration: none;
+  color: white;
+  padding: 0.3em 0.3em 0.4em 0.3em;
+  border-radius:0.3em;
+}
+
+.download a:hover {
+  color: #00ff00;
+  background: SeaGreen;
+  text-decoration: none;
+}
+
+/* About */
+
+.about_table {
+  width: 70%;
+  margin: auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.about_table td {
+  text-align: right;
+}
+
+.about_table td, .about_table th {
+  border: 1px solid black;
+}
+
+#warning {
+  margin: 1em 1em 0 1em;
+  padding: 10px;
+  background: #e0ceb5;
+  border-radius:0.5em;
+}
+
+#warning h2 {
+  text-align: center;
+  margin: 0;
+}
+
+.column1 {
+  float: left;
+  width: 55%;
+}
+
+.column2 {
+  float: left;
+  width: 45%;
+}
+
+.clear {
+  clear: both;
+}
+
+.bar {
+  display: inline-block;
+  height: 12px;
+}
+
+.footer {
+  font-size: 90%;  
+  color: darkred;
+  text-align: center;
+  min-height: 12em;
+}
+
+/* Tables */
+
+table {
+  width: 100%;
+  font-size: 12px;
+  line-height: 100%;
+}
+
+table th {
+  text-align:center;
+}
+
+/* Print configuration */
+.only_print {
+  display: none;
+}
+

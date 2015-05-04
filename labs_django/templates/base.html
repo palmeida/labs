@@ -1,0 +1,66 @@
+{% load url from future %}
+{% load staticfiles %}
+<!doctype html>
+
+<html lang="pt">
+<head>
+  <title>{% block title %}Labs tretas.org{% endblock %}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/labs_style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/print.css' %}" media="print">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+  <script src="{% static 'jquery/jquery-1.10.2.js' %}"></script>
+  <script src="{% static 'js/main_menu.js' %}"></script>
+  {% block base_header %} {## Use only on base templates derived from this one ##}
+  <meta name="keywords" content="tretas.org, laboratório, utilidades, experiências">
+  <meta name="description" content="">
+  {% endblock %}
+  {% block header %}{% endblock %}
+</head>
+<body>
+  <!-- Start Header for Printing -->
+  <div class="only_print">
+    <div id="print_header">
+      <p>{% block print_header %}Laboratórios tretas.org{% endblock %}</p>
+      <hr>
+    </div>
+  </div> 
+  <!-- End Header for Printing -->
+
+  <!-- Star Header -->
+  <div id="screen_header" class="noprint">
+    <h1>{% block inpage_title %}{% endblock %}</h1>
+    <div id="header_menu">
+      <img src="{% static 'img/menu.svg' %}" height="48px">
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div id="main_menu">
+    <ul>
+      {% block main_menu %}{% endblock %}
+    </ul>
+  </div>
+  <!-- End Header -->
+
+  <!-- Body Content -->
+  <div id="content">
+  {% block body_content %}{% endblock %}
+  </div>
+  <!-- End body content -->
+
+  <!-- Star Footer -->
+  <div id="screen_footer" class="noprint">
+    {% block screen_footer %}{% endblock %}
+  </div>
+  <!-- End Footer -->
+
+  <!-- Start Footer for Printing -->
+  <div class="only_print">
+    <div id="print_footer">
+      <hr>
+      <p>★ Impresso em {% now "Y-m-d H:i" %} ★</p>
+    </div>
+  </div> 
+  <!-- End Footer for Printing -->
+</body>
+</html>

@@ -1,0 +1,110 @@
+{% extends "hc_base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block title %}Eleições Legislativas{% endblock %}
+
+{% block header %}
+  <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+  <script src="{% static 'jquery/jquery-ui-1.11.4.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui.css' %}">
+  <script>
+    $(function() {
+         $( "#slider-range-max" ).slider({
+             range: "max",
+         min: 10,
+         max: 1000,
+         value: {{ seats }},
+         slide: function( event, ui ) {
+             $( "#id_seats" ).val( ui.value );
+         }
+         });
+         $( "#id_seats" ).val( $( "#slider-range-max" ).slider( "value" ) );
+    });
+  </script>{% endblock %}
+
+{% block pagetitle %}Eleições Legislativas de {{ date }}{% endblock %}
+
+{% block body_content %}
+  <div class="main-content" style="margin: 2em auto;">
+    <div class="column1">
+      <object data="{% url 'svg_hemicycle' %}?date={{ date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}" width="100%" type="image/svg+xml">
+        <p>O seu browser não suporta SVG. Use, por exemplo, o firefox num desktop para ver esta página.</p>
+      </object>
+      <div class="download">
+        <a href="{% url 'svg_hemicycle' %}?date={{ date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}&attachment=yes">Descarregar</a>
+      </div>
+      <div class="clear"></div>
+      <form>
+        <table>
+          <tr>
+            <th align=right>{{ form.date.label_tag }}</th>
+            <td>{{ form.date }}</td>
+          </tr>
+          <tr>
+            <th align=right>{{ form.uni.label_tag }}</th>
+            <td>{{ form.uni }}</td>
+          </tr>
+          <tr>
+            <th align=right>{{ form.seats.label_tag }}</th>
+            <td><input id="id_seats" name="seats" value="230" type="number" min="10" max="1000" step="1" required="true">
+              <div id="slider-range-max" style="display:inline-block;width:7em;margin-right:2em;margin-left:2em;"></div></td>
+          </tr>
+          <tr>
+            <td colspan=2 align=right><button style="width:8em" type="submit" value="Submit">Simular</button></td>
+          </table>
+      </form>
+
+      <hr>
+      <div>
+        {% if prev_date %}
+        <a href="{% url 'hc_results' %}?date={{ prev_date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}">&lt; {{ prev_date.isoformat }}</a> 
+        {% endif %}
+        {% if next_date %}
+        <div style="float:right">
+          <a href="{% url 'hc_results' %}?date={{ next_date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}">{{ next_date.isoformat }} &gt;</a> 
+        </div>
+        {% endif %}
+      </div>
+
+    </div> <!-- Column 1 -->
+    <div class="column2">
+      <table>
+        <tr>
+          <th>Partidos</th>
+          <th>Votos</th>
+          <th>%<br>Votos</th>
+          <th>A.</th>
+          <th>%<br>Assentos</th>
+          <th></th>
+        </tr>
+        {% for district in results.total %}
+        <tr>
+          <td><div style="display:inline-block;width:10px;height:10px;background-color:{{ district.color_1 }};border-radius:5px;margin-right:0.2em;"></div><a href="http://pt.wikipedia.org/wiki/{{ district.party.wikipedia }}" target="_blank">{{ district.initials }}</a></td>
+          <td align="right">{{ district.votes|intcomma  }}</td>
+          <td align="right">{{ district.percentage|floatformat:2 }}&nbsp;%</td>
+          <td align="right">{{ district.result }}</td>
+          <td align="right">{{ district.percentage_seats|floatformat:2 }}&nbsp;%</td>
+          <td><div class="bar" style="background-color:{{ district.color_1 }};width:{{ district.graph }}px;"></div></td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td></td>
+          <th style="text-align:right;">{{ votes|intcomma }}</th>
+          <td colspan=2></td>
+          <th style="text-align:right;">{{ seats }}</th>
+          <td></td>
+      </table>
+
+      {% if uni_district or seats != real_seats %}
+      <div id="warning">
+        <h2>ATENÇÃO</h2>
+        <p>Os resultados apresentados são uma simulação<br>
+        Clique <a href="{% url 'hc_results' %}?date={{ date.isoformat }}">aqui</a> para ver os resultados reais.</p>
+      </div>
+      {% endif %}
+
+    </div> <!-- Column 2 -->
+    <div class="clear"></div>
+  </div> <!-- End main-content -->
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "exchange_base.html" %}
+{% load staticfiles %}
+
+{% block header %}
+<script src="{% static 'jquery/jquery-ui-1.11.4.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui.css' %}">
+<script src="{% static 'js/exchange.js' %}"></script>
+{% endblock %}
+
+{% block body_content %}
+
+<div class="main-content" style="margin: 2em auto;">
+  <h2>Cálculo</h2>
+  <form method="GET" action="">
+    <table class="exchange">
+      <tr>
+        <td><div class="step_number">1</div></td>
+        <td>{{ form.date }}</td>
+        <td colspan=2></td>
+      </tr>
+      <tr>
+        <td><div class="step_number">2</div></td>
+        <td>{{ form.from_currency }}</td>
+        <td><button class="round_btn"  style="width:2em" type="submit" value="switch" name="submit">⇄</button></td>
+        <td>{{ form.to_currency }}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="value_display">{{ 1|floatformat:4 }}</td>
+        <td><span style="font-size:30px;">→</span></td>
+        <td class="value_display">{{ to_value_1|floatformat:4 }}</td>
+      </tr>
+      <tr>
+        <td><div class="step_number">3</div></td>
+        <td>{{ form.from_value }}</td>
+        <td><span style="font-size:30px;">→</span></td>
+        <td class="value_display">{{ to_value|floatformat:4 }}</td>
+      </tr>
+      {% if msg  %}<tr>
+        <td></td>
+        <td class="error_msg" colspan=3>
+          {% for m in msg %}
+          <p>{{ m }}
+          {% endfor %}
+        </td>
+      </tr>{% endif %}
+      <tr>
+        <td><div class="step_number">4</div></td>
+        <td colspan=3 style="text-align:right;"><br><br><button class="btn"  style="width:8em" type="submit" value="Submit">Calcular</button></td>
+      </tr>
+    </table>
+  </form>
+  <p>Não deixe de consultar <a href="https://www.bportugal.pt/pt-PT/Estatisticas/Dominios%20Estatisticos/EstatisticasCambiais/Paginas/Taxasdereferenciadiarias.aspx" target="_blank">a página do BdP</a> sobre as taxas de câmbio.
+
+</div>
+
+{% endblock %}

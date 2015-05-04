@@ -1,0 +1,21 @@
+{% extends "exchange_base.html" %}
+
+{% block body_content %}
+  <div class="main-content text_box">
+    <h2>Acerca</h2>
+
+    <p>Nesta aplicação são mostradas as taxas de câmbio publicadas diariamente pelo Banco de Portugal,
+    dos <a href="https://www.bportugal.pt/pt-PT/Estatisticas/Dominios%20Estatisticos/EstatisticasCambiais/Paginas/Taxasdereferenciadiarias.aspx" target="_blank">câmbios do Banco de Portugal</a>.
+
+    <h2>Utilização</h2> 
+
+    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/lrNzLH4owxI?rel=0" frameborder="0" allowfullscreen></iframe>
+
+    <p>Na <a href="{% url 'exchange_notes' %}">página "Notas"</a> temos uma lista completa das moedas na base de dados.
+
+    <h2>Aviso</h2>
+
+    <p>Em caso de dúvida consulte sempre o site do BdP, lincado mais acima nesta
+    página.
+  </div>
+{% endblock %}

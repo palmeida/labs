@@ -1,0 +1,76 @@
+{% extends "hc_base.html" %}
+{% load humanize %}
+
+{% block title %}Eleições Legislativas: Notas{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block pagetitle %}Notas{% endblock %}
+
+{% block body_content %}
+  <div class="main-content text_box">
+
+    <h2>Eleições de 1976</h2>
+
+    <p>Nas eleições de 1976 foram eleitos <strong>263</strong> deputados. Isto não é um erro, como se pode verificar pelo <a href="http://dre.tretas.org/dre/220489/" target="_blank">Mapa Oficial publicado em Diário da República</a>.
+
+    <p>Em todas as outras eleições o número de deputados eleitos foi de 250 e, a partir das eleições de 1991, passaram a 230 deputados.
+
+    <h2>Circulo Eleitoral dos Açores</h2>
+
+    <p>Cada distrito eleitoral tem um código, nas listas disponíveis no site da CNE este é um código numérico de 5 ou 6 dígitos. 
+
+    <p>Acontece que, no caso dos Açores, temos na constituinte e nas eleições de 76 os seguintes códigos:
+
+    <ul>
+      <li>190000 - São Jorge</li> 
+      <li>200000 - Corvo</li>
+      <li>210000 - São Miguel</li>
+    </ul>
+
+    <p>Nas intercalares de 1979 passou-se a considerar um único círculo nos Açores. Para tal a CNE reutilizou o código "210000" (São Miguel) agora para todo o arquipélago. Como isso vai chocar com o código que já temos definido para São Miguel, neste programa usámos o código "210001" para designar o circulo eleitoral dos Açores. Como só tratamos os resultados a nível de distrito este código não vai chocar com nenhum outro.
+
+    <p>Para complicar o assunto um pouco mais, em 1999 e 2002 a tabela da CNE tem os resultados para os Açores sob o código "190000" (São Jorge). Em 2005 volta a usar o código "210000" e, em 2009 e 2011, usa o "190000" de novo. Em 2011 tem a particularidade de atribuir o código "190000" a Angra do Heroísmo. 
+
+    <p>O uso do código "210001", neste site, elimina as confusões anteriores.
+   
+    <p>Notar que deve de haver boa justificação para os dados publicados pela CNE, fizemos esta alteração apenas para simplificar a lógica do programa.
+
+
+    <h2>Circulo da Europa e de Fora da Europa</h2>
+
+    <p>O número de deputados atribuídos ao circulo da Europa e ao circulo de Fora da Europa não são atribuídos de forma proporcional. Ou seja, não é usado o método d'Hondt para fazer a distribuição dos mandatos pelos círculos eleitorais. Segundo a Lei Eleitoral (<a href="http://dre.tretas.org/dre/33379/" target="_blank">Lei 14/79, de 16 de Maio</a>), temos no Artigo 13º, na alínea 1 e 2:</p>
+
+    <blockquote>
+      <ol>
+        <li>O número total de deputados pelos círculos eleitorais do território nacional é de duzentos e quarenta e seis [não inclui, portanto, os círculos da Europa e de Fora da Europa], distribuídos proporcionalmente ao número de eleitores de cada círculo, segundo o método da média mais alta de Hondt, de harmonia com o critério fixado no artigo 16.º</li>
+        <li>A cada um dos círculos eleitorais referidos no <span title="O n.º 4 do artigo anterior vem: Os eleitores residentes fora do território nacional são agrupados em dois círculos eleitorais, um abrangendo todo o território dos países europeus, outro o dos demais países e o território de Macau, e ambos com sede em Lisboa." style="text-decoration:underline;text-decoration-color:red;-moz-text-decoration-color: red;text-decoration-style: dashed;-moz-text-decoration-style: dashed;">n.º 4 do artigo anterior</span> [círculos da Europa e de Fora da Europa] corresponde um deputado, se o número de eleitores não exceder 55000, e dois, se o exceder. </li>
+      </ol>
+    </blockquote>
+
+    <p>Isto introduz alguma distorção. Por exemplo para <a href="http://dre.tretas.org/dre/283501/" target="_blank">2011 temos inscritos nestes círculos</a>:</p>
+
+    <table class="about_table">
+      <tr>
+        <th>Circulo</th>
+        <th>Inscritos</th>
+        <th>Assentos<br>d'Hondt</th>
+        <th>Segundo a Lei</th>
+      </tr>
+      <tr>
+        <th>Europa</th>
+        <td>75.114</td>
+        <td>1</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>Fora da Europa</th>
+        <td>120.068</td>
+        <td>3</td>
+        <td>2</td>
+      </tr>
+    </table>
+
+  </div> <!-- End main-content -->
+{% endblock %}

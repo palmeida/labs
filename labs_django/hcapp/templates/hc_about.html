@@ -1,0 +1,169 @@
+{% extends "hc_base.html" %}
+{% load humanize %}
+
+{% block title %}Eleições Legislativas: Acerca{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block pagetitle %}Acerca deste site{% endblock %}
+
+{% block body_content %}
+  <div class="main-content text_box">
+
+    <h2>Motivação</h2>
+
+    <p>Ao longo dos anos a ideia da redução do número de deputados vai aparecendo de vez em quando. As variações a este tema incluem, para além da redução do número de deputados, a utilização de um circulo eleitoral único (temos neste momento 22 círculos eleitorais), ou a utilização de círculos eleitorais uninominais, ou então sistemas mistos entre os dois com a utilização dos chamados "círculos de compensação".</p>
+
+    <p>No <a href="http://tretas.org/">tretas.org</a> temos uma secção dedicada aos <a href="http://www.tretas.org/Elei%C3%A7%C3%B5es">actos eleitorais</a> onde este tipo de análise é útil, dai termos desenvolvido este projecto ao longo dos anos.</p>
+
+    <h2>Funcionalidades</h2>
+
+    <p>Este site permite simular a composição do parlamento através do controlo de várias variáveis.</p>
+    
+    <p>Por exemplo, as eleições de 5 de Junho de 2011 tiveram o seguinte resultado (estão representados o BE, CDU, PS, PSD e CDS):</p>
+
+    <img src="{% url 'svg_hemicycle' %}?date=2011-06-05&seats=230&uni=M" width="60%" title="Parlamento resultante das eleições de 5 de Junho de 2011 com 230 lugares" class="center_content">
+
+    <p>A proposta de redução de deputados normalmente aponta para 180 ou 181 deputados. Nesse caso teríamos:
+
+    <img src="{% url 'svg_hemicycle' %}?date=2011-06-05&seats=181&uni=M" width="60%" title="Parlamento resultante das eleições de 5 de Junho de 2011 com 181 lugares" class="center_content">
+
+    <p>O resultado anterior considera os 22 círculos eleitorais normais. Podemos facilmente simular o mesmo parlamento considerando apenas um circulo eleitoral:</p> 
+
+    <img src="{% url 'svg_hemicycle' %}?date=2011-06-05&seats=180&uni=U" width="60%" title="Parlamento resultante das eleições de 5 de Junho de 2011 com 181 lugares e apenas um circulo eleitoral" class="center_content">
+
+    <p>Neste caso o PCTP/MRPP e o PAN entrariam para o parlamento com dois deputados cada um.</p>
+
+    <p>Em tabela temos:
+
+    <table class="about_table">
+      <tr>
+        <th rowspan=2>Partido</th>
+        <th rowspan=2>% Votos</th>
+        <th colspan=2>Resultado real<br>230 deputados<br>22 círculos</th>
+        <th colspan=2>Resultado simulado<br>181 deputados<br>22 círculos</th>
+        <th colspan=2>Resultado simulado<br>180 deputados<br>1 círculo</th>
+      </tr>
+      <tr>
+        <th>Assentos</th>
+        <th>%</th>
+        <th>Assentos</th>
+        <th>%</th>
+        <th>Assentos</th>
+        <th>%</th>
+      </tr>
+      <tr>
+        <td>PPD/PSD</td>
+        <td>40.31%</td>
+        <td>108</td>
+        <td>46.96%</td>
+        <td>87</td>
+        <td>48.07%</td>
+        <td>75</td>
+        <td>41.44%</td>
+      </tr>
+      <tr>
+        <td>PS</td>
+        <td>29.24%</td>
+        <td>74</td>
+        <td>32.17%</td>
+        <td>57</td>
+        <td>31.49%</td>
+        <td>55</td>
+        <td>30.39%</td>
+      </tr>
+      <tr>
+        <td>CDS-PP</td>
+        <td>12.21%</td>
+        <td>24</td>
+        <td>10.43%</td>
+        <td>22</td>
+        <td>12.15%</td>
+        <td>22</td>
+        <td>12.15%</td>
+      </tr>
+      <tr>
+        <td>CDU</td>
+        <td>8.24%</td>
+        <td>16</td>
+        <td>6.96%</td>
+        <td>11</td>
+        <td>6.08%</td>
+        <td>15</td>
+        <td>8.29%</td>
+      </tr>
+      <tr>
+        <td>BE</td>
+        <td>5.39%</td>
+        <td>8</td>
+        <td>3.48%</td>
+        <td>4</td>
+        <td>2.21%</td>
+        <td>10</td>
+        <td>5.52%</td>
+      </tr>
+      <tr>
+        <td>PCTP/MRPP</td>
+        <td>1.17%</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>2</td>
+        <td>1.10%</td>
+      </tr>
+      <tr>
+        <td>PAN</td>
+        <td>1.08%</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>2</td>
+        <td>1.10%</td>
+      </tr>
+    </table>
+
+    <h2>Fonte dos dados</h2>
+
+    <p>A fonte dos dados utilizados neste site foi o site da <a href="http://www.cne.pt/" target="_blank">Comissão Nacional de Eleições</a>, mais exactamente <a href="http://eleicoes.cne.pt/sel_eleicoes.cfm?m=raster" target="_blank">nesta ligação</a>. Os dados foram tratados de acordo com o que está descrito <a href="{% url 'hc_notes' %}">nesta página</a>.</p>
+
+    <p>Os dados em bruto usados neste trabalho foram:
+
+    <p><a href="{{ STATIC_URL }}data/resultados_legislativas-1975-2011.csv">Resultados nas legislativas</a> (150kB) - ficheiro <a href="http://pt.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a> com o seguinte cabeçalho:
+      <ul>
+        <li>Código do circulo eleitoral;</li>
+        <li>Nome do circulo eleitoral;</li>
+        <li>Tipo de eleição (AR - Assembleia da República, ARI - Intercalar);</li>
+        <li>Data das eleições;</li>
+        <li>Sigla do partido;</li>
+        <li>Número de votos;</li>
+        <li>Percentagem dos votos;</li>
+        <li>Mandatos.</li>
+      </ul> 
+
+    <p><a href="{{ STATIC_URL }}data/inscritos_votos_brancos_nulos_legislativas-1975-2011.csv">Estatisticas das eleições</a> (15kB) - ficheiro <a href="http://pt.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a> com o seguinte cabeçalho:
+
+    <ul>
+      <li>Código do circulo eleitoral;</li>
+      <li>Nome do circulo eleitoral;</li>
+      <li>Data das eleições;</li>
+      <li>Eleitores inscritos</li>
+      <li>Votantes;</li>
+      <li>Votos Brancos;</li>
+      <li>Votos Nulos.</li>
+    </ul>
+
+    <h2>Licenças &amp; Código fonte</h2>
+
+    <p>O código usado neste site é disponibilizado sob <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html" targer="_blank">licença GPL v3</a>. Pode fazer o download do código fonte <a href="/src/parlamento-r1598.tar.bz2">aqui</a>. Se quiser testar o código não hesite em contactar-nos com qualquer dúvida que possa ter.</p>
+
+    <p>Quanto ao site em si, é publicado sob licença: <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons - Atribuição  4.0 Internacional</a>.</p>
+
+    <h2>Contacto</h2>
+
+    <p>Pode contactar-nos para o seguinte mail <a href="mailto:webmaster@tretas.org">webmaster@tretas.org</a>.</p>
+
+  </div> <!-- End main-content -->
+{% endblock %}

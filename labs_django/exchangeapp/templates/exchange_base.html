@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Câmbios do Banco de Portugal{% endblock %}
+
+{% block print_header %}Câmbios do Banco de Portugal{% endblock %}</p>
+
+{% block inpage_title %}Câmbios do Banco de Portugal{% endblock %}
+
+{% block base_header %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/exchange_style.css' %}">
+  <meta name="keywords" content="Câmbios, passado, data, BdP, Banco de Portugal">
+  <meta name="description" content="Nesta área fazemos o câmbio entre várias moedas de acordo com o publicado diariamente pelo Banco de Portugal.">
+{% endblock %}
+
+{% block main_menu %}
+<li><a href="{% url 'index' %}">Página inicial</a>
+<li><hr>
+<li><a href="{% url 'exchange_calc' %}">Câmbios</a>
+<li><a href="{% url 'exchange_notes' %}">Notas</a>
+<li><a href="{% url 'exchange_about' %}">Acerca</a>
+{% endblock %}
+
+{% block screen_footer %}
+    <p>[ <a href="{% url 'index' %}">Pagina Inicial</a> ] 
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Eleições Legislativas{% endblock %}
+
+{% block print_header %}Eleições Legislativas{% endblock %}</p>
+
+{% block inpage_title %}Eleições Legislativas{% endblock %}
+
+{% block main_menu %}
+<li><a href="{% url 'index' %}">Página inicial</a>
+<li><hr>
+<li><a href={% url 'hc_results' %}>Resultados / Simulação</a>
+<li><a href="{% url 'hc_notes' %}">Notas</a>
+<li><a href="{% url 'hc_law' %}">Legislação</a>
+<li><a href="{% url 'hc_about' %}">Acerca</a>
+{% endblock %}
+
+{% block base_header %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/hc_style.css' %}">
+  <meta name="keywords" content="eleições, eleições legislativas, assembleia da república, parlamento, simulação, redução de deputados ">
+  <meta name="description" content="Neste site apresentam-se os resultados das eleições legislativas após o 25 de Abril. Para além disso é possível simular a existência de um número diferente de deputados ou usar apenas um único circulo eleitoral.">
+{% endblock %}
+
+{% block screen_footer %}
+    <p>[ <a href="{% url 'index' %}">Pagina Inicial</a> ] 
+{% endblock %}

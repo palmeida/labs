@@ -1,0 +1,33 @@
+{% extends "devaluation_base.html" %}
+{% load staticfiles %}
+
+{% block header %}
+<script src="{% static 'jquery/jquery-ui-1.11.4.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui.css' %}">
+<script src="{% static 'js/devaluation.js' %}"></script>
+{% endblock %}
+
+{% block body_content %}
+<div class="main-content" style="margin: 2em auto;">
+  <h2>Cálculo</h2>
+  <form method="GET" action="">
+
+    <p>{{ form.value }} EUR no ano {{ form.year_0 }} correspondem a <strong>{{ to_value_gov|floatformat:4  }} EUR</strong> em {{ form.year_1 }} usando os coeficientes de desvalorização para fazer o cálculo{% if to_value_inf %} ou correspondem a <strong>{{ to_value_inf|floatformat:4 }} EUR</strong> usando os valores da inflação{% endif %}.
+
+  {% if msg  %}
+    <div class="error_msg">
+      {% for m in msg %}
+      <p>{{ m }}
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div style="float:right;">
+    <p><button class="btn"  style="width:8em" type="submit" value="Submit">Calcular</button>
+  </div>
+  <div style="clear:both;"></div>
+
+  </form>
+</div>
+
+
+{% endblock %}

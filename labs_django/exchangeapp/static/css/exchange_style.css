@@ -1,0 +1,110 @@
+/* Exchange Table */
+
+table.exchange {
+  margin: 2em auto;
+}
+
+table.exchange tr {
+  height: 3em;
+}
+
+/* Comboboxes */
+
+.custom-combobox {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-combobox-input {
+  margin:0;
+  padding:0;
+  height: 3em;
+  width: 15em;
+  font-size: 16pt;
+}
+
+/* Input fields */
+
+.step_number  {
+  display: table-cell;
+  height:3em;
+  width:3em;
+  border-radius:1.5em;
+  background:#8b0000;
+  color:white;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+}
+
+input[type=number] {
+  text-align: right;
+}
+
+#id_from_value {
+  border: none;
+  border-radius: 6px;
+  margin:0;
+  padding:0;
+  font-size: 15pt;
+  width: 14em;
+  height: 3em;
+  padding: 0 1em 0 1em;
+}
+
+#id_from_currency, #id_to_currency {
+  background-color: white;
+  border: none;
+  border-radius: 6px;
+  margin:0;
+  padding:0;
+  font-size: 15pt;
+  width: 16em;
+  height: 3em;
+  padding: 0 1em 0 1em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(/static/img/down_arrow.png) 99% / 7% no-repeat white;
+}
+
+.value_display {
+  display: table-cell;
+  border: none;
+  border-radius: 6px;
+  background-color: yellow;
+  margin:0;
+  padding:0;
+  font-size: 15pt;
+  width: 14em;
+  height: 3em;
+  vertical-align: middle;
+  text-align: right;
+  padding: 0 1em 0 1em;
+}
+
+#id_date {
+  border: none;
+  border-radius: 6px;
+  margin:0;
+  padding:0;
+  font-size: 15pt;
+  width: 16em;
+  height: 3em;
+  text-align: center;
+}
+
+.error_msg {
+  display: table-cell;
+  border: none;
+  border-radius: 6px;
+  background-color: #e0ceb5;
+  margin:0;
+  padding:0;
+  width: 14em;
+  height: 3em;
+  vertical-align: middle;
+  padding: 0 1em 0 1em;
+  line-height: 70%;
+}
+

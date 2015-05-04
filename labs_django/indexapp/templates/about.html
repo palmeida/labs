@@ -1,0 +1,27 @@
+{% extends "index_base.html" %}
+
+{% block body_content %}
+  <div class="main-content text_box">
+    <h2>Acerca</h2>
+
+    <p>Este site serve para testar ideias que não encaixam nos outros sites que mantemos e que, ao mesmo tempo, poderão ter alguma utilidade para os cidadãos.
+
+    <p>Começamos com as seguintes aplicações: uma aplicação para consultar os resultados das eleições legislativas e para simular a composição do parlamento caso o número de deputados seja alterado; uma outra aplicação para calcular câmbios baseada nas taxas de câmbio de referência publicadas diariamente pelo BdP e, finalmente, uma aplicação para calcular a desvalorização da moeda.
+
+    <p>Qualquer comentário, crítica ou sugestão pode ser enviado para: <a href="mailto:webmaster@tretas.org">webmaster@tretas.org</a>.
+
+    <h2>Nota técnica</h2>
+
+    <p>Este sistema corre sobre Linux, utilizam-se os seguintes sistemas principais:
+    <ul>
+      <li>Base de dados PostgreSQL;
+      <li>Interface web feita com Django;
+    </ul>
+    <p>Corre num servidor HP ML310 G8.
+
+    <h2>Desenvolvimento deste sistema</h2>
+
+    <p>Todo o site foi feito usando software livre.
+    <p>A escolha óbvia para a licença do próprio sistema foi a GPL v3. Pode obter o código fonte do site, colaborar no desenvolvimento, abrir bug reports, etc, na <a href="https://github.com/heldergg/labs" target="_blank">página do projecto no github</a>.
+  </div>
+{% endblock %}

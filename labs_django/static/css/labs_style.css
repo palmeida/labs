@@ -1,0 +1,214 @@
+/* General */
+
+body {
+  background-color: #8b0000;
+  margin: 0;
+
+  font-family: verdana, arial, sans-serif;
+  line-height: 150%;
+}
+
+h2 {
+  color: darkred;
+}
+
+
+/* Main Menu */
+
+#header_menu {
+  float:right;
+  position:absolute;
+  top:0;
+  right:0;
+}
+
+#main_menu {
+  display:none;
+  position:fixed;
+  float: right;
+  top: 4em;
+  right: 0.25em;
+  background-color: #8b0000;
+  z-index:2;
+  padding: 0.1em;
+  margin: 0;
+  border-style: solid;
+  border-color: #ffebce;
+  border-width: 0 1px 1px 1px;
+}
+
+#main_menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#main_menu li {
+  color: white;
+}
+
+#main_menu li:hover {
+  background-color: #a50000;
+}
+
+#main_menu li hr {
+  margin: 0;
+  border-style: solid;
+  color: white;
+}
+
+#main_menu a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 0.5em 1em;
+}
+/* Header */
+
+#screen_header {
+  margin: 0;
+  background-color: #8b0000;
+  color: white;
+  height: 4em;
+  width: 100%;
+}
+
+#screen_header h1 {
+  margin: 0;
+  padding: 0;
+  padding: 0.5em 0 0 0.5em;
+}
+
+#screen_header img {
+  vertical-align: middle;
+  padding: 0.5em 0.5em 0 0;
+}
+
+/* Content */
+
+#content {
+  padding: 1em 0 1em 0;
+  background-color: #ffebce;
+}
+
+/* One Column layout */
+.main-content {
+  max-width: 65em;
+  margin: auto;
+}
+
+.text_box {
+  background: #e0ceb5;
+  border-radius:0.5em;
+  padding: 0.5em; 
+}
+
+.center_content {
+  display: block;
+  margin:auto;
+}
+
+/* Footer */
+
+#screen_footer {
+  margin: 0;
+  padding: 0.3em;
+  color: white;
+}
+
+#screen_footer p {
+  text-align: center;
+  margin: auto ;
+}
+
+#screen_footer a {
+  color: white;
+  text-decoration: none;
+}
+
+#screen_footer a:hover {
+  text-decoration: underline;
+}
+
+/* Project list table */
+
+.main_list {
+  margin: 1em;
+}
+
+.main_list th {
+  border:  1px solid darkgray; 
+  border-radius: 0.5em;
+  background-color: whitesmoke;
+  padding: 1em;
+}
+
+.main_list td {
+  color: #7c4900;
+  padding: 0em 0.5em 0.5em 0.5em;
+  vertical-align: top;
+  width: 50%;
+}
+
+.main_list a {
+  font-weight: bold;
+  color: darkred;
+  text-decoration: none;
+}
+
+.main_list a:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+/* Printing */
+
+.only_print {
+  display: none;
+}
+
+/* Utils */
+
+.clear {
+  clear: both;
+}
+
+/* Forms */
+/* Table */
+
+table.form_table {
+  margin: 2em auto;
+}
+
+table.form_table tr {
+  height: 3em;
+}
+
+
+  /* Button */
+
+.btn {
+  border: none;
+  background: #d40808;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 12pt;
+  padding: 0.5em;
+}
+
+.btn:hover {
+  background: #ed7c7c;
+  background-image: linear-gradient(to bottom, #ed7c7c, #d40808);
+  text-decoration: none;
+}
+
+  /* Numeric input */
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}

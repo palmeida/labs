@@ -1,0 +1,72 @@
+{% extends "exchange_base.html" %}
+
+{% block body_content %}
+  <div class="main-content text_box">
+    <h2>Notas</h2>
+
+    <p>Nesta aplicação são mostradas as taxas de câmbio publicadas diariamente pelo Banco de Portugal, disponíveis
+    <a href="https://www.bportugal.pt/pt-PT/Estatisticas/Dominios%20Estatisticos/EstatisticasCambiais/Paginas/Taxasdereferenciadiarias.aspx" target="_blank">nesta página</a>.
+
+    <p>O BdP mantém um ficheiro com câmbios desde 1999-01-04 para todas as moedas cotadas diariamente que usamos para actualizar a nossa base de dados.
+
+    <p>Estas taxas de câmbio de referência são calculadas diariamente com base no procedimento de concertação diária entre os bancos centrais dentro e fora do Sistema Europeu de Bancos Centrais, que ocorre por volta das 14:15 CET (tempo central europeu, 13:15 hora de Lisboa).
+
+    <p>Pode haver dias em que a cotação de uma dada moeda não está disponível, quando for esse o caso o sistema tenta encontrar a cotação de data anterior à escolhida. Sempre que isso acontece é mostrado um aviso.
+
+    <h2>Lista de moedas</h2>
+
+    <p>As moedas com taxas de câmbio constantes na base de dados são:
+
+    <ul>
+      <li>AUD - Dólar australiano
+      <li>BGN - Lev da Bulgária
+      <li>CAD - Dólar canadiano
+      <li>CHF - Franco suíço
+      <li>CYP - Libra de Chipre
+      <li>CZK - Coroa checa
+      <li>DKK - Coroa dinamarquesa
+      <li>EEK - Coroa da Estónia
+      <li>GBP - Libra esterlina
+      <li>GRD - Dracma grega
+      <li>HKD - Dólar de Hong-Kong
+      <li>HUF - Forint da Hungria
+      <li>ISK - Coroa islandesa
+      <li>JPY - Iene japonês
+      <li>KRW - Won da Coreia do Sul
+      <li>LTL - Litas da Lituânia
+      <li>LVL - Lats da Letónia
+      <li>MTL - Lira de Malta
+      <li>NOK - Coroa norueguesa
+      <li>NZD - Dólar da Nova Zelândia
+      <li>PLN - Zloty da Polónia
+      <li>RON - Novo Leu da Roménia
+      <li>SEK - Coroa sueca
+      <li>SGD - Dólar de Singapura
+      <li>SIT - Tolar da Eslovénia
+      <li>SKK - Coroa da Eslováquia
+      <li>TRY - Lira turca
+      <li>USD - Dólar dos E,U,A,
+      <li>ZAR - Rand da África do Sul
+      <li>BRL - Real do Brasil
+      <li>CVE - Escudo de Cabo Verde
+      <li>MOP - Pataca de Macau
+      <li>XAU - Ouro em barra (onça troy)
+      <li>IMF - Direito de Saque Especial
+      <li>CNY - Yuan Renmimbi da China
+      <li>HRK - Kuna da Croácia
+      <li>IDR - Rupia Indonésia
+      <li>MYR - Ringgit da Malásia
+      <li>PHP - Peso Filipino
+      <li>RUB - Rublo Russo
+      <li>THB - Baht da Tailândia
+      <li>MXN - Peso mexicano
+      <li>INR - Rupia indiana
+      <li>ILS - Shequel de Israel
+    </ul>
+
+    <h2>Aviso</h2>
+
+    <p>Em caso de dúvida consulte sempre o site do BdP, lincado mais acima nesta
+    página.
+  </div>
+{% endblock %}

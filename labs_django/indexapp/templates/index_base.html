@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Laboratórios tretas.org{% endblock %}
+
+{% block inpage_title %}Laboratórios tretas.org{% endblock %}
+
+{% block main_menu %}
+<li><a href="{% url 'index' %}">Página inicial</a>
+<li><hr>
+<li><a href="{% url 'about' %}">Acerca</a>
+{% endblock %}
+
+{% block screen_footer %}
+<p>[ <a href="{% url 'index' %}">Pagina Inicial</a> | <a href="{% url 'about' %}">Acerca</a> ]
+{% endblock %}
