@@ -11,7 +11,7 @@
       <li>No primeiro método recorremos aos coeficientes <a href="http://dre.tretas.org/?q=%22coeficientes+de+desvaloriza%C3%A7%C3%A3o%22+tipo%3Aportaria&m=T&order=-date" target="_blank">publicados anualmente
       em Diário da República</a>. Por este método podemos calcular a desvalorização
       da moeda desde 1903 até ao presente;
-      <li>No segundo método usamos os <a href="http://www.pordata.pt/Portugal/Taxa+de+Infla%C3%A7%C3%A3o+%28Taxa+de+Varia%C3%A7%C3%A3o+++%C3%8Dndice+de+Pre%C3%A7os+no+Consumidor%29-138" target="_blank">valores da taxa de inflacção</a> para fazer o cálculo.
+      <li>No segundo método usamos os <a href="http://www.pordata.pt/Portugal/Taxa+de+Infla%C3%A7%C3%A3o+%28Taxa+de+Varia%C3%A7%C3%A3o+++%C3%8Dndice+de+Pre%C3%A7os+no+Consumidor%29-138" target="_blank">valores da taxa de inflação</a> para fazer o cálculo.
       De momento apenas temos estes valores desde 1960 até ao presente.
     </ul>
 
@@ -89,7 +89,16 @@
     <p>Se a &lt; b: V_b = V_a * T_ab
     <p>Se a &gt; b: V_b = V_a / T_ab
 
+    <h3>Desvalorização usando a inflação</h3>
 
+    <p>Seja T_i a taxa de inflação para um dado ano 'i'.
+
+    <p>A taxa de desvalorização entre o ano 'a' e o ano 'b' será (com b &gt; a): T_ab = (1 + T_a) * (1 + T_a+1) * ... * (1 + T_b)
+
+    <p>O valor V da moeda de um dado ano 'a' no ano 'b' vem:
+
+    <p>Se a &lt; b: V_b = V_a * T_ab
+    <p>Se a &gt; b: V_b = V_a / T_ab
 
   </div>
 {% endblock %}
