@@ -19,10 +19,12 @@ table.value_list th {
   border: solid 1px darkgray;
   text-align: center;
   margin: 0;
+  padding: 0.2em;
 }
 
 table.value_list td {
   border: solid 1px darkgray;
   text-align: right;
   margin: 0;
+  padding: 0.2em;
 }
