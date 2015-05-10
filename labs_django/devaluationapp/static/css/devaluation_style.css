@@ -1,0 +1,28 @@
+/* Forms */
+
+input {
+  text-align: right;
+  width: 4em;
+}
+
+/* Tables */
+
+table.value_list {
+  border: solid 1px darkgray;
+  /* Because of bug #410959 in firefox */
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: auto;
+}
+
+table.value_list th {
+  border: solid 1px darkgray;
+  text-align: center;
+  margin: 0;
+}
+
+table.value_list td {
+  border: solid 1px darkgray;
+  text-align: right;
+  margin: 0;
+}
