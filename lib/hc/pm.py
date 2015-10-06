@@ -19,6 +19,9 @@ def hondt_method( seats, parties ):
     that will contain the number of MPs.
 
     As described in "Lei 14/79 Artigo 16"
+
+    Additionally a remaining_votes key will be added to each party identifying
+    the votes that didn't contribute to gain a seat.
     '''
 
     for party in parties:

@@ -28,11 +28,11 @@
 {% block body_content %}
   <div class="main-content" style="margin: 2em auto;">
     <div class="column1">
-      <object data="{% url 'svg_hemicycle' %}?date={{ date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}" width="100%" type="image/svg+xml">
+      <object data="{% url 'svg_hemicycle' %}?date={{ date.isoformat }}&seats={{ seats }}&national_circle={{ national_circle }}" width="100%" type="image/svg+xml">
         <p>O seu browser não suporta SVG. Use, por exemplo, o firefox num desktop para ver esta página.</p>
       </object>
       <div class="download">
-        <a href="{% url 'svg_hemicycle' %}?date={{ date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}&attachment=yes">Descarregar</a>
+        <a href="{% url 'svg_hemicycle' %}?date={{ date.isoformat }}&seats={{ seats }}&national_circle={{ national_circle }}&attachment=yes">Descarregar</a>
       </div>
       <div class="clear"></div>
       <form>
@@ -42,8 +42,8 @@
             <td>{{ form.date }}</td>
           </tr>
           <tr>
-            <th align=right>{{ form.uni.label_tag }}</th>
-            <td>{{ form.uni }}</td>
+            <th align=right>{{ form.national_circle.label_tag }}</th>
+            <td><input id="id_national_circle" name="national_circle" value="{{ national_circle }}" type="number" min="0" max="1000" step="1" required="true">
           </tr>
           <tr>
             <th align=right>{{ form.seats.label_tag }}</th>
@@ -56,13 +56,20 @@
       </form>
 
       <hr>
+      <p>Se atribuir um número ao "Circulo Nacional" então será considerado um
+      circulo eleitoral extra. Os votos deste circulo serão obtidos em todos os
+      outros círculos a partir dos votos dos partidos que não obtiveram qualquer
+      deputado.
+      <p>Para considerar um circulo nacional único deve fazer corresponder o
+      número de deputados do "Circulo Nacional" ao número de assentos.
+      <hr>
       <div>
         {% if prev_date %}
-        <a href="{% url 'hc_results' %}?date={{ prev_date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}">&lt; {{ prev_date.isoformat }}</a> 
+        <a href="{% url 'hc_results' %}?date={{ prev_date.isoformat }}&seats={{ seats }}&national_circle={{ national_circle }}">&lt; {{ prev_date.isoformat }}</a>
         {% endif %}
         {% if next_date %}
         <div style="float:right">
-          <a href="{% url 'hc_results' %}?date={{ next_date.isoformat }}&seats={{ seats }}&uni={% if uni_district %}U{% else %}M{% endif %}">{{ next_date.isoformat }} &gt;</a> 
+          <a href="{% url 'hc_results' %}?date={{ next_date.isoformat }}&seats={{ seats }}&national_circle={{ national_circle }}">{{ next_date.isoformat }} &gt;</a>
         </div>
         {% endif %}
       </div>
@@ -96,7 +103,7 @@
           <td></td>
       </table>
 
-      {% if uni_district or seats != real_seats %}
+      {% if  national_circle > 0 or seats != real_seats %}
       <div id="warning">
         <h2>ATENÇÃO</h2>
         <p>Os resultados apresentados são uma simulação<br>

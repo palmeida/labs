@@ -80,7 +80,7 @@ def get_election_results( date, uni_district ):
     return results_dict, total_seats, parties
 
 
-def get_district_seats( date, seats, total_seats, uni_district ):
+def get_district_seats( date, seats, total_seats, national_circle ):
     '''
     If the number of 'seats' for which we want to define the hemicycle
     is different from the number of seats the actual elections where made
@@ -91,7 +91,7 @@ def get_district_seats( date, seats, total_seats, uni_district ):
     Data source: DGAI
     http://www.eleicoes.mj.pt/legislativas2011/index.html
     '''
-    if uni_district:
+    if national_circle == seats:
         return { 1:{ 'code': 1, 'result': seats } }
 
     if seats != total_seats:
@@ -130,6 +130,7 @@ def get_country_results( results, districts_seats ):
         seats = districts_seats[ district ]['result']
         results[ district ] = hondt_method( seats, results[ district ] )
 
+def get_totals( results ):
     # Compute the totals
     totals_tmp = {}
     for district in results:
@@ -146,20 +147,53 @@ def get_country_results( results, districts_seats ):
             totals_tmp[initials]['votes'] += party['votes']
     results[ 'total' ] = [ totals_tmp[ r ] for r in totals_tmp ]
 
-def process_election_results( date, seats, uni_district=False  ):
+def get_national_circle_votes( national_circle_result, results):
+    nc = {}
+    for district in results:
+        for party_votes in results[district]:
+            if not party_votes['result'] and party_votes['votes']:
+                if party_votes['initials'] not in nc:
+                    nc[party_votes['initials']] = {
+                            'party': party_votes['party'],
+                            'votes': party_votes['votes'],
+                            'result': 0,
+                            'initials': party_votes['initials'],
+                            }
+                else:
+                    nc[party_votes['initials']]['votes'] += party_votes['votes']
+
+    for party in nc:
+        national_circle_result.append(nc[party])
+
+
+def process_election_results( date, seats, national_circle  ):
     '''
     year, month, day - date of the election to analyze
     seats - number of total seats to consider
     '''
+    uni_district = seats == national_circle
+    if national_circle > 0 and national_circle < seats:
+        seats = seats - national_circle
 
     # Get the raw results:
     results, total_seats, parties = get_election_results( date, uni_district )
 
     # Get the seat distribution per electoral district
-    districts_seats = get_district_seats( date, seats, total_seats, uni_district )
+    districts_seats = get_district_seats( date, seats, total_seats, national_circle )
 
     # Get country results
     get_country_results( results, districts_seats )
+
+    # Get the results for the national circle
+    if national_circle > 0 and national_circle != seats:
+        # Get the "non used votes" for each district for each party
+        national_circle_result = []
+        get_national_circle_votes( national_circle_result, results)
+        # Calculate the seats dist
+        results['national_circle'] = hondt_method( national_circle, national_circle_result)
+
+    # Make the total sum
+    get_totals( results )
 
     return results, districts_seats
 
@@ -173,11 +207,18 @@ def svg_hemicycle( request ):
     try:
         date = datetime.datetime.strptime(request.GET.get('date', LAST_ELECTION), '%Y-%m-%d').date()
         seats = int(request.GET.get('seats', 0))
-        uni = request.GET.get('uni','M')
+        national_circle = int(request.GET.get('national_circle',0))
         attachment = request.GET.get('attachment','no')
     except ValueError:
         raise Http404
+
+    try:
+        uni = request.GET.get('uni','M')
+    except:
+        pass
     uni_district = True if uni=='U' else False
+    if uni == 'U':
+        national_circle = seats
 
     # Argument testing
 
@@ -189,12 +230,16 @@ def svg_hemicycle( request ):
         seats = ElectionResult.objects.filter(date__exact = date).aggregate(Sum('seats'))['seats__sum']
     if seats < 10 or seats > 1000:
         raise Http404
+    if national_circle < 0 or national_circle > seats:
+        raise Http404
 
     attachment = 'attachment; ' if attachment == 'yes' else ''
-    uni_str = 'circulo_unico' if uni_district else 'varios_circulos'
+    uni_str = ( 'circulo_unico'   if national_circle == seats else
+                'varios_circulos' if national_circle == 0     else
+                'varios_circulos_mais_circulo_nacional_%d' % national_circle )
 
     # Process the results
-    results, districts_seats = process_election_results(date , seats, uni_district)
+    results, districts_seats = process_election_results(date , seats, national_circle)
 
     # Format the Hemicycle data
     parties = results[ 'total' ]
@@ -234,10 +279,19 @@ def results( request ):
         seats = 0
     try:
         date = datetime.datetime.strptime(request.GET.get('date', LAST_ELECTION), '%Y-%m-%d').date()
-        uni = request.GET.get('uni','M')
     except ValueError:
         raise Http404
-    uni_district = True if uni=='U' else False
+    try:
+        national_circle = int(request.GET.get('national_circle',0))
+    except ValueError:
+        # Compatibility
+        national_circle = 0
+    try:
+        uni = request.GET.get('uni','')=='U'
+        if uni:
+            national_circle = seats
+    except ValueError:
+        pass
 
     # Parameter testing
     election_results = ElectionResult.objects.filter(date__exact = date).aggregate(Count('date'))['date__count']
@@ -251,8 +305,13 @@ def results( request ):
     elif seats > 1000:
         seats = 1000
 
+    if national_circle < 0:
+        national_circle = 0
+    if national_circle > seats:
+        national_circle = seats
+
     # Process the results
-    results, districts_seats = process_election_results(date , seats, uni_district)
+    results, districts_seats = process_election_results(date , seats, national_circle)
 
     # Format the Hemicycle data
     votes = ElectionResult.objects.filter(date__exact = date).aggregate(Sum('votes'))['votes__sum']
@@ -275,7 +334,7 @@ def results( request ):
     # Form
 
     form = ElectionForm({ 'date': date.isoformat(),
-                          'uni': uni,
+                          'national_circle': national_circle,
                           'seats': seats })
 
     # Context
@@ -283,8 +342,8 @@ def results( request ):
     context['date'] = date
     context['next_date'] = next_date
     context['prev_date'] = prev_date
-    context['uni_district'] = uni_district
     context['seats'] = seats
+    context['national_circle'] = national_circle
     context['real_seats'] = ElectionResult.objects.filter(date__exact = date).aggregate(Sum('seats'))['seats__sum']
     context['votes'] = votes
     context['results'] = results
