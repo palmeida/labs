@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
 # Global Imports:
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
-urlpatterns = patterns('exchangeapp.views',
+# Local Imports:
+from exchangeapp import views
 
+urlpatterns = [
         # Calculate the exchange rates
-        url(r'^$', 'exchange_calc', name='exchange_calc'),
+        url(r'^$', views.exchange_calc, name='exchange_calc'),
 
         ##
         # Static pages
@@ -20,5 +22,4 @@ urlpatterns = patterns('exchangeapp.views',
         url(r'^about/$',
             TemplateView.as_view(template_name='exchange_about.html'),
             name='exchange_about'),
-
-        )
+        ]

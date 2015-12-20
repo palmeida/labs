@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
 # Global Imports:
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
-urlpatterns = patterns('hcapp.views',
+# Local Imports:
+from hcapp import views
 
+urlpatterns = [
         # Create the requested hemicycle
-        url(r'^svg/$', 'svg_hemicycle', name='svg_hemicycle'),
+        url(r'^svg/$', views.svg_hemicycle, name='svg_hemicycle'),
 
         # Show election results
-        url(r'^$', 'results', name='hc_results'),
+        url(r'^$', views.results, name='hc_results'),
 
         ##
         # Static pages
@@ -29,5 +31,5 @@ urlpatterns = patterns('hcapp.views',
         url(r'^law/$',
             TemplateView.as_view(template_name='hc_law.html'),
             name='hc_law'),
-        )
+        ]
 
