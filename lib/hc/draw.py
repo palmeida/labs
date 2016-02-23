@@ -10,13 +10,16 @@ This module produces SVG files with hemicycles representations.
 
 from pysvg.structure import svg, g, defs, use, title
 from pysvg.builders import TransformBuilder, ShapeBuilder
+from pysvg.linking import a
 from pysvg.shape import path
 from pysvg.style import style
 
 from math import sin, cos, pi, floor
+from operator import attrgetter
 import os.path
 
 from chairs import Hemicycle
+from entities import MP, Party
 
 ##
 #  Config
@@ -42,14 +45,14 @@ def degrees( angle ):
     return angle * 180 / pi
 
 ##
-#  SGV
+#  SVG
 ##
 
-class HemicycleSGV(object):
+class HemicycleSVG(object):
     '''
     This class creates svg representations of hemicycles.
     '''
-    def __init__(self, hc, parties = None ):
+    def __init__(self, hc, mps = None ):
         '''
         hc - hemicycle object
         parties - list with the following structure:
@@ -62,58 +65,81 @@ class HemicycleSGV(object):
             ]
         '''
         self.hc = hc
-        self.parties = parties
+        self.mps = mps
         self.chairs = []
+        self.parties = self.get_parties()
 
         # Check if the number of chairs in the results matches the
         # calculated hemicycle number of chairs.
-        nchairs = sum([ party['result'] for party in parties ])
+        nchairs = sum([ party.result for party in self.parties ])
         if nchairs != hc.nchairs:
             raise SVGError(
                 'Results chair number don\'t match the hemicycle size.')
 
+
+    def get_parties(self):
+        parties = list(set([mp.party for mp in self.mps]))
+        return sorted(parties, key=attrgetter('order'))
+
+
+    def get_mp_generators(self):
+        '''Create generators for all party MPs'''
+
+        mp_generators = {}
+
+        for party in self.parties:
+            mps = filter(
+                    lambda x: x.party.initials == party.initials, 
+                    self.mps
+                    )
+            mp_generators[party.order] = iter(mps)
+        return mp_generators
+
+
     def chair_dist(self):
         '''Chair distribution on the hemicycle'''
 
+        mp_generators = self.get_mp_generators()
+
         def smallest( parties, first_row ):
             '''Returns the number of chairs for the smalest party in parties'''
-            remaining = ( sum([ party['result'] for party in parties ]) -
-                    sum([ sum(party['seats']) for party in parties ]))
+            remaining = ( sum([ party.result for party in parties ]) -
+                    sum([ sum(party.seats) for party in parties ]))
 
             smallest_party = parties[0]
 
-            dist_seats      = sum(smallest_party['seats'])
-            remaining_seats = smallest_party['result'] - dist_seats
+            dist_seats      = sum(smallest_party.seats)
+            remaining_seats = smallest_party.result - dist_seats
 
             percent = float(remaining_seats) / remaining
             nc = int(floor(percent * first_row))
 
-            if sum(smallest_party['seats']) == smallest_party['result']:
+            if sum(smallest_party.seats) == smallest_party.result:
                 return 0
 
             return 1 if not nc else nc
 
 
         def fill_row( parties , seats ):
-            parties.sort( key = lambda party: party['result'] )
+            parties.sort(key = lambda party: party.result)
 
             # Find how many seats we have for each party on this row
             for i in range(len(parties)):
                 party = parties[i]
 
                 party_row_seats = smallest( parties[i:], seats )
-                party['seats'].append( party_row_seats )
+                party.seats.append( party_row_seats )
                 seats -= party_row_seats
 
 
         parties = self.parties
         for party in parties:
-            party['seats'] = []
+            party.seats = []
 
         hc = [ row['nchairs'] for row in self.hc.rows() ]
         for row in hc:
-            fill_row( parties, row )
-            parties.sort( key = lambda party: party['order'] )
+            fill_row(parties, row)
+            parties.sort(key = lambda party: party.order)
 
 
         # Create an hemicicle matrix, each row is empty, we'll fill the
@@ -123,8 +149,8 @@ class HemicycleSGV(object):
             row = []
             for j in range(len(parties)):
                 party = parties[j]
-                for seat in range(party['seats'][i]):
-                    row.append(j)
+                for seat in range(party.seats[i]):
+                    row.append(next(mp_generators[j]))
 
             chairs.append( row )
 
@@ -137,7 +163,7 @@ class HemicycleSGV(object):
         width = self.hc.outer_radius() * 2
         return width, height
 
-    def chair_svg(self, row, column, id_attr ):
+    def chair_svg(self, row, column, mp):
         angle, x, y = self.hc.chair_location(row,column)
 
         width, height = self.svg_dimention()
@@ -152,7 +178,7 @@ class HemicycleSGV(object):
         th.setTranslation('%f,%f' % (x,y))
 
         u=use()
-        u._attributes['xlink:href'] = '#%s' % id_attr
+        u._attributes['xlink:href'] = '#%s' % mp.party.initials
         u.set_transform(th.getTransform())
 
         return u
@@ -179,7 +205,12 @@ class HemicycleSGV(object):
     def defs(self):
         d = defs()
         for party in self.parties:
-            d.addElement(self.chair( party['initials'], party['color_1'], party['color_2'] ))
+            chair = self.chair(
+                    party.initials, 
+                    party.head_color, 
+                    party.body_color
+                    )
+            d.addElement(chair)
         return d
 
     def svg(self):
@@ -197,26 +228,31 @@ class HemicycleSGV(object):
 
         # Create the party groups
         groups = {}
-        for i in range(len(self.parties)):
-            party = self.parties[i]
+        for i, party in enumerate(self.parties):
             groups[i] = g()
-            # groups[i].set_fill(party['color'])
-            groups[i].set_id( '%s_group' % party['initials'])
+            groups[i].set_id('%s_group' % party.initials)
             t = title()
-            t.appendTextContent( 'Grupo Parlamentar do %s' % party['initials'] )
+            t.appendTextContent('Grupo Parlamentar %s' % party.initials)
             groups[i].addElement(t)
 
         # Add the chair shape definition
-        s.addElement( self.defs() )
+        s.addElement(self.defs())
 
         # Distribute the chairs
-        for row in range(len(self.chairs)):
-            for col in range(len(self.chairs[row])):
-                angle, x, y = self.hc.chair_location(row,col)
+        for i, row in enumerate(self.chairs):
+            for j, mp in enumerate(row):
+                angle, x, y = self.hc.chair_location(i, j)
                 x = x + width / 2
                 y = height - y
 
-                groups[ self.chairs[row][col] ].addElement(self.chair_svg(row,col,self.parties[self.chairs[row][col]]['initials']))
+                t = title()
+                t.appendTextContent(mp.name)
+                mp_link = a()
+                # TODO This link is a placeholder, it will be more sensible
+                mp_link._attributes['xlink:href'] = 'http://parlamento.pt'
+                mp_link.addElement(t)
+                mp_link.addElement(self.chair_svg(i, j, mp))
+                groups[mp.party.order].addElement(mp_link)
 
         # Insert the party groups into the svg
         for i in range(len(self.parties)):
@@ -226,26 +262,30 @@ class HemicycleSGV(object):
 
 
 if __name__ == '__main__':
-    # Vote count
-    parties = [ { 'initials':'BE',  'order': 0, 'result':8,   'image':'cadeira-BE.svg' },
-                { 'initials':'CDU', 'order': 1, 'result':16,  'image':'cadeira-CDU.svg' },
-                { 'initials':'PS',  'order': 2, 'result':74,  'image':'cadeira-PS.svg' },
-                { 'initials':'PSD', 'order': 3, 'result':108, 'image':'cadeira-PSD.svg' },
-                { 'initials':'CDS', 'order': 4, 'result':24,  'image':'cadeira-CDS.svg' },
-              ]
+    # Parties
+    be = Party(initials='BE', order=0, head_color='black', body_color='red')
+    cdu = Party(initials='CDU', order=1, head_color='red', body_color='red')
+    ps = Party(initials='PS', order=2, head_color='pink', body_color='pink')
+    psd = Party(initials='PSD', order=3, head_color='orange', body_color='orange')
+    pp = Party(initials='PP', order=4, head_color='blue', body_color='blue')
 
-    parties = [
-    { 'name' : 'Bloco de Esquerda', 'initials'              : 'BE',
-        'order' : 0, 'result' : 7,  'color_1' : 'purple', 'color_2' : 'red' },
-    { 'name' : 'Coligação Democratica Unitária', 'initials' : 'CDU',
-        'order' : 1, 'result' : 16, 'color_1' : 'red', 'color_2'    : 'yellow' },
-    { 'name' : 'Partido Socialista', 'initials'             : 'PS',
-        'order' : 2, 'result' : 74, 'color_1' : 'pink', 'color_2'   : 'pink' },
-    { 'name' : 'Partido Social Democrata', 'initials'       : 'PSD',
-        'order' : 3, 'result' : 109,'color_1' : 'orange', 'color_2' : 'orange' },
-    { 'name' : 'Centro Democrático Social', 'initials'      : 'CDS',
-        'order' : 4, 'result' : 24, 'color_1' : 'blue', 'color_2'   : 'white' },
-              ]
+    # MPs
+    mps = []
+    for i in range(1, 8):
+        mps.append(MP(name='Deputado_BE_%d' % i, party=be))
+    for i in range(8, 24):
+        mps.append(MP(name='Deputado_CDU_%d' % i, party=cdu))
+    for i in range(24, 98):
+        mps.append(MP(name='Deputado_PS_%d' % i, party=ps))
+    for i in range(98, 207):
+        mps.append(MP(name='Deputado_PSD_%d' % i, party=psd))
+    for i in range(207, 231):
+        mps.append(MP(name='Deputado_PP_%d' % i, party=pp))
+
+    # Results
+    for party in (be, cdu, ps, psd, pp):
+        result = len(filter(lambda x: x.party.initials == party.initials, mps))
+        party.result = result
 
     # Create the hemicycle
     hc = Hemicycle( chair_width = 60,
@@ -255,7 +295,7 @@ if __name__ == '__main__':
                     hangle = (4/3) * pi )
 
     # Graphical representation of the hemicycle
-    hc_svg = HemicycleSGV(hc, parties)
+    hc_svg = HemicycleSVG(hc, mps)
 
     hc_svg.chair_dist()
 
