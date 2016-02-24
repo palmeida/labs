@@ -55,14 +55,15 @@ class HemicycleSVG(object):
     def __init__(self, hc, mps = None ):
         '''
         hc - hemicycle object
-        parties - list with the following structure:
-            [ { 'initials': '<legend name>',
-                'result': <number of chairs>,
-                'image': '<svg filename>,
-                'color': <foreground color>,
-                'background': <background color>
-              }, ...
-            ]
+        mps - list of MP objects, which must have these attributes:
+                * name (string)
+                * party (Party object)
+
+        The Party object must have the following attributes:
+                * initials
+                * order (seating order in parliament, left to right)
+                * head_color (color for the MP heads in the SVG)
+                * body_color (color for the MP bodies in the SVG)
         '''
         self.hc = hc
         self.mps = mps
