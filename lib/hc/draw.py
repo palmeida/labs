@@ -12,7 +12,6 @@ from pysvg.structure import svg, g, defs, use, title
 from pysvg.builders import TransformBuilder, ShapeBuilder
 from pysvg.linking import a
 from pysvg.shape import path
-from pysvg.style import style
 
 from math import sin, cos, pi, floor
 from operator import attrgetter
@@ -170,9 +169,10 @@ class HemicycleSVG(object):
 
         width, height = self.svg_dimention()
 
-        # This '30' is half the size of the svg chair, should be configured
-        x = x + width / 2 - 30 * cos(pi/2 - angle) + TRANSX
-        y = height - y - 30 * sin(pi/2 - angle) + TRANSY
+        # NOTE: Original comment stated '30' is half the size of the svg chair
+        # NOTE: 30 was replaced with 25 to make the hemicycle roughly balanced
+        x = x + width / 2 - 25 * cos(pi/2 - angle) + TRANSX
+        y = height - y - 25 * sin(pi/2 - angle) + TRANSY
 
         # Chair translation and rotation parametrization
         th = TransformBuilder()
@@ -185,33 +185,26 @@ class HemicycleSVG(object):
 
         return u
 
-    def chair( self, id_attr, color_1, color_2 ):
-        head = ShapeBuilder().createCircle( 30, 25, 20, stroke='black', strokewidth=5.0, fill=color_1 )
+    def chair(self, party):
+        style = 'stroke:black;stroke-width:4.0;fill:%s;'
+        head = ShapeBuilder().createCircle(30, 25, 16)
         head.set_class('head')
-        body = path( pathData="M 19.264266,38.267870 C 12.892238,41.659428 9.0221978,48.396703 6.6126745,55.405840 L 51.476471,55.405840 C 49.270169,48.545436 45.682644,41.911786 39.811885,38.267870 C 33.901416,38.010889 26.459633,38.267870 19.264266,38.267870 z " )
-        body.set_style( 'stroke-width:5.0;stroke:black;fill:%s;' % color_2 )
+        head.set_style(style % party.head_color)
+        body = ShapeBuilder().createPolygon('12,50,47,50,30,15')
         body.set_class('body')
-
-        th=TransformBuilder()
-        th.setScaling('0.8','0.8')
+        body.set_style(style % party.body_color)
 
         group = g()
+        group.set_id(party.initials)
         group.addElement(body)
         group.addElement(head)
-        group.set_id(id_attr)
-        group.set_transform(th.getTransform())
 
         return group
 
     def defs(self):
         d = defs()
         for party in self.parties:
-            chair = self.chair(
-                party.initials,
-                party.head_color,
-                party.body_color
-                )
-            d.addElement(chair)
+            d.addElement(self.chair(party))
         return d
 
     def svg(self):
